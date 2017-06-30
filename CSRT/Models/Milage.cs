@@ -15,7 +15,7 @@ namespace CSRT.Models
         public string MilageCovered { get; set; }
         [Required]
         public int VehicleMovementId { get; set; }
-        [ForeignKey("Id")]
+        [ForeignKey("VehicleMovementId")]
         public VehicleMovement vehicleMovement{ get; set; }
        
     }

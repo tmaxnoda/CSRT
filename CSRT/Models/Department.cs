@@ -5,15 +5,15 @@ namespace CSRT.Models
 {
     public class Department
     {
-        //public Department()
-        //{
-        //    Mottors = new HashSet<Mottor>();
-        //}
+        public Department()
+        {
+            Mottors = new HashSet<Mottor>();
+        }
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
 
-        //public virtual ICollection<Mottor> Mottors { get; set; }
+        public virtual ICollection<Mottor> Mottors { get; set; }
        
     }
 }

@@ -7,7 +7,7 @@ using CSRT.Models;
 
 namespace CSRT.Areas.Factory
 {
-    public static  class MottorFactory
+    public static class MottorFactory
     {
         public static Mottor ViewModelToMottoEntity(MottorViewModel model)
         {
@@ -30,10 +30,38 @@ namespace CSRT.Areas.Factory
         public static MottorViewModel MottoEntityToViewModel(Mottor model)
         {
             var entity = new MottorViewModel(model);
-            
+
             return entity;
         }
 
+        public static MottorViewModel MottoEntityToViewModelFOrEdit(Mottor model)
+        {
+            var motto = new MottorViewModel()
+            {
+                Id = model.Id,
+                MottorModelId = model.MottorModelId,
+               
+                PlateNumber = model.PlateNumber,
+                IsAvailable = model.IsAvailable,
+                VehicleId = model.VehicleId,
+                DepartmentId = model.DepartmentId,
+               
+            };
+
+            return motto;
+        }
+            
         
+
+        public static  bool isPlateNumberAlreadyExisting(Mottor model, MottorViewModel viewModel)
+        {
+            if (model.PlateNumber.Trim() == viewModel.PlateNumber.Trim())
+            {
+                return true;
+            }
+
+            return false;
+
+        }
     }
 }

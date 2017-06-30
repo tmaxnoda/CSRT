@@ -7,13 +7,13 @@ namespace CSRT.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class updateMottoModel : IMigrationMetadata
+    public sealed partial class FirstCommitofchanges : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(updateMottoModel));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(FirstCommitofchanges));
         
         string IMigrationMetadata.Id
         {
-            get { return "201706241554152_updateMottoModel"; }
+            get { return "201706291237587_First Commit of changes"; }
         }
         
         string IMigrationMetadata.Source

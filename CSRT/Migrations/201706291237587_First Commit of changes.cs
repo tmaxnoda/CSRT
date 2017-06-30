@@ -3,7 +3,7 @@ namespace CSRT.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class InitialMigration : DbMigration
+    public partial class FirstCommitofchanges : DbMigration
     {
         public override void Up()
         {
@@ -17,12 +17,84 @@ namespace CSRT.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
+                "dbo.Mottor",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        MottorModelId = c.Int(nullable: false),
+                        VehicleId = c.Int(nullable: false),
+                        IsAvailable = c.Boolean(nullable: false),
+                        PlateNumber = c.String(nullable: false),
+                        DepartmentId = c.Int(nullable: false),
+                        DateCreated = c.DateTime(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Department", t => t.DepartmentId, cascadeDelete: true)
+                .ForeignKey("dbo.MottorModel", t => t.MottorModelId, cascadeDelete: true)
+                .ForeignKey("dbo.Vehicle", t => t.VehicleId, cascadeDelete: true)
+                .Index(t => t.MottorModelId)
+                .Index(t => t.VehicleId)
+                .Index(t => t.DepartmentId);
+            
+            CreateTable(
+                "dbo.MottorModel",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Name = c.String(nullable: false),
+                        Make = c.String(nullable: false),
+                        Total = c.String(nullable: false),
+                        Date = c.DateTime(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
+                "dbo.Vehicle",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Type = c.String(),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
+                "dbo.VehicleMovement",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        MotoId = c.Int(nullable: false),
+                        DriverId = c.Int(nullable: false),
+                        DepartmentId = c.Int(nullable: false),
+                        NumberOfPeopleGoingOut = c.String(nullable: false),
+                        NameOfPeopleGoingOut = c.String(nullable: false),
+                        TimeOut = c.DateTime(nullable: false),
+                        Date = c.DateTime(nullable: false),
+                        MilageOut = c.String(nullable: false),
+                        Purpose = c.String(nullable: false),
+                        Destination = c.String(nullable: false),
+                        User_Id = c.String(maxLength: 128),
+                        Mottor_Id = c.Int(),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Department", t => t.DepartmentId, cascadeDelete: true)
+                .ForeignKey("dbo.Driver", t => t.DriverId, cascadeDelete: true)
+                .ForeignKey("dbo.Mottor", t => t.MotoId)
+                .ForeignKey("dbo.AspNetUsers", t => t.User_Id)
+                .ForeignKey("dbo.Mottor", t => t.Mottor_Id)
+                .Index(t => t.MotoId)
+                .Index(t => t.DriverId)
+                .Index(t => t.DepartmentId)
+                .Index(t => t.User_Id)
+                .Index(t => t.Mottor_Id);
+            
+            CreateTable(
                 "dbo.Driver",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
                         Name = c.String(nullable: false),
                         IsAvailable = c.Boolean(nullable: false),
+                        PhoneNumber = c.String(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -40,83 +112,6 @@ namespace CSRT.Migrations
                 .ForeignKey("dbo.Mottor", t => t.MotoId, cascadeDelete: true)
                 .Index(t => t.MotoId)
                 .Index(t => t.DriverId);
-            
-            CreateTable(
-                "dbo.Mottor",
-                c => new
-                    {
-                        Id = c.Int(nullable: false),
-                        MottorModelId = c.Int(nullable: false),
-                        VehicleId = c.Int(nullable: false),
-                        IsAvailable = c.Boolean(nullable: false),
-                        PlateNumber = c.String(nullable: false),
-                        DepartmentId = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Department", t => t.Id)
-                .ForeignKey("dbo.MottorModel", t => t.Id)
-                .ForeignKey("dbo.Vehicle", t => t.Id)
-                .Index(t => t.Id);
-            
-            CreateTable(
-                "dbo.MottorModel",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(nullable: false),
-                        Make = c.String(nullable: false),
-                        Number = c.String(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id);
-            
-            CreateTable(
-                "dbo.Vehicle",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        Type = c.String(),
-                    })
-                .PrimaryKey(t => t.Id);
-            
-            CreateTable(
-                "dbo.Milage",
-                c => new
-                    {
-                        Id = c.Int(nullable: false),
-                        MilageIn = c.String(),
-                        MilageOut = c.String(),
-                        MilageCovered = c.String(),
-                        VehicleMovementId = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.VehicleMovement", t => t.Id)
-                .Index(t => t.Id);
-            
-            CreateTable(
-                "dbo.VehicleMovement",
-                c => new
-                    {
-                        Id = c.Int(nullable: false),
-                        MotoId = c.Int(nullable: false),
-                        DriverId = c.Int(nullable: false),
-                        DepartmentId = c.Int(nullable: false),
-                        NumberOfPeopleGoingOut = c.String(),
-                        NameOfPeopleGoingOut = c.String(),
-                        Purpose = c.String(),
-                        TimeIn = c.DateTime(nullable: false),
-                        TimeOut = c.DateTime(nullable: false),
-                        SignIn = c.Boolean(nullable: false),
-                        SignOut = c.Boolean(nullable: false),
-                        Remark = c.String(),
-                        User_Id = c.String(maxLength: 128),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Department", t => t.Id)
-                .ForeignKey("dbo.Driver", t => t.Id)
-                .ForeignKey("dbo.Mottor", t => t.Id)
-                .ForeignKey("dbo.AspNetUsers", t => t.User_Id)
-                .Index(t => t.Id)
-                .Index(t => t.User_Id);
             
             CreateTable(
                 "dbo.AspNetUsers",
@@ -179,6 +174,32 @@ namespace CSRT.Migrations
                 .Index(t => t.RoleId);
             
             CreateTable(
+                "dbo.Milage",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        MilageIn = c.String(),
+                        MilageOut = c.String(),
+                        MilageCovered = c.String(),
+                        VehicleMovementId = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.VehicleMovement", t => t.VehicleMovementId, cascadeDelete: true)
+                .Index(t => t.VehicleMovementId);
+            
+            CreateTable(
+                "dbo.MottorModelViewModel",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Name = c.String(nullable: false),
+                        Make = c.String(nullable: false),
+                        Total = c.String(nullable: false),
+                        Date = c.DateTime(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
                 "dbo.AspNetRoles",
                 c => new
                     {
@@ -194,43 +215,50 @@ namespace CSRT.Migrations
         public override void Down()
         {
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
-            DropForeignKey("dbo.Milage", "Id", "dbo.VehicleMovement");
+            DropForeignKey("dbo.Milage", "VehicleMovementId", "dbo.VehicleMovement");
+            DropForeignKey("dbo.VehicleMovement", "Mottor_Id", "dbo.Mottor");
             DropForeignKey("dbo.VehicleMovement", "User_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
-            DropForeignKey("dbo.VehicleMovement", "Id", "dbo.Mottor");
-            DropForeignKey("dbo.VehicleMovement", "Id", "dbo.Driver");
-            DropForeignKey("dbo.VehicleMovement", "Id", "dbo.Department");
-            DropForeignKey("dbo.Mottor", "Id", "dbo.Vehicle");
-            DropForeignKey("dbo.Mottor", "Id", "dbo.MottorModel");
+            DropForeignKey("dbo.VehicleMovement", "MotoId", "dbo.Mottor");
+            DropForeignKey("dbo.VehicleMovement", "DriverId", "dbo.Driver");
             DropForeignKey("dbo.MottoDriver", "MotoId", "dbo.Mottor");
-            DropForeignKey("dbo.Mottor", "Id", "dbo.Department");
             DropForeignKey("dbo.MottoDriver", "DriverId", "dbo.Driver");
+            DropForeignKey("dbo.VehicleMovement", "DepartmentId", "dbo.Department");
+            DropForeignKey("dbo.Mottor", "VehicleId", "dbo.Vehicle");
+            DropForeignKey("dbo.Mottor", "MottorModelId", "dbo.MottorModel");
+            DropForeignKey("dbo.Mottor", "DepartmentId", "dbo.Department");
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
+            DropIndex("dbo.Milage", new[] { "VehicleMovementId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
-            DropIndex("dbo.VehicleMovement", new[] { "User_Id" });
-            DropIndex("dbo.VehicleMovement", new[] { "Id" });
-            DropIndex("dbo.Milage", new[] { "Id" });
-            DropIndex("dbo.Mottor", new[] { "Id" });
             DropIndex("dbo.MottoDriver", new[] { "DriverId" });
             DropIndex("dbo.MottoDriver", new[] { "MotoId" });
+            DropIndex("dbo.VehicleMovement", new[] { "Mottor_Id" });
+            DropIndex("dbo.VehicleMovement", new[] { "User_Id" });
+            DropIndex("dbo.VehicleMovement", new[] { "DepartmentId" });
+            DropIndex("dbo.VehicleMovement", new[] { "DriverId" });
+            DropIndex("dbo.VehicleMovement", new[] { "MotoId" });
+            DropIndex("dbo.Mottor", new[] { "DepartmentId" });
+            DropIndex("dbo.Mottor", new[] { "VehicleId" });
+            DropIndex("dbo.Mottor", new[] { "MottorModelId" });
             DropTable("dbo.AspNetRoles");
+            DropTable("dbo.MottorModelViewModel");
+            DropTable("dbo.Milage");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");
+            DropTable("dbo.MottoDriver");
+            DropTable("dbo.Driver");
             DropTable("dbo.VehicleMovement");
-            DropTable("dbo.Milage");
             DropTable("dbo.Vehicle");
             DropTable("dbo.MottorModel");
             DropTable("dbo.Mottor");
-            DropTable("dbo.MottoDriver");
-            DropTable("dbo.Driver");
             DropTable("dbo.Department");
         }
     }

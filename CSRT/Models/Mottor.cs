@@ -10,21 +10,21 @@ namespace CSRT.Models
     public class Mottor
     {
 
-        //public Mottor()
-        //{
-        //    VehicleMovements = new HashSet<VehicleMovement>();
-        //}
+        public Mottor()
+        {
+            VehicleMovements = new HashSet<VehicleMovement>();
+        }
         [Key]
         public int Id { get; set; }
         [Required]
         public int MottorModelId { get; set; }
-        [ForeignKey("Id")]
+        [ForeignKey("MottorModelId")]
         public  MottorModel MottorModel { get; set; }
 
         [Required]
         public int VehicleId { get; set; }
 
-        [ForeignKey("Id")]
+        [ForeignKey("VehicleId")]
         public Vehicle Vehicle { get; set; }
 
         [Required]
@@ -34,11 +34,11 @@ namespace CSRT.Models
 
         [Required]
         public int DepartmentId { get; set; }
-        [ForeignKey("Id")]
+        [ForeignKey("DepartmentId")]
         public Department Department { get; set; }
 
         public DateTime DateCreated { get; set; }
-        //public virtual ICollection<VehicleMovement> VehicleMovements { get; set; }
+        public virtual ICollection<VehicleMovement> VehicleMovements { get; set; }
 
     }
 }

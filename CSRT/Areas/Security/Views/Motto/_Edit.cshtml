@@ -1,0 +1,73 @@
+﻿@model CSRT.Areas.Security.ViewModels.MottorViewModel
+
+
+
+
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title" id="myModalLabel">Add a new Mottor</h4>
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="modal-body">
+        <div class="form-horizontal">
+
+      
+            @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+            <div class="form-group">
+                @Html.LabelFor(model => model.VehicleName, htmlAttributes: new {@class = "control-label col-md-4"})
+                <div class="col-md-8">
+                    @Html.DropDownListFor(model => model.VehicleId, new SelectList(Model.Vehicles, "Id", "Type", Model.VehicleId), "Select Type of Vehicle", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.VehicleId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <hr/>
+            <div class="form-group">
+                @Html.LabelFor(model => model.MottorModelName, htmlAttributes: new {@class = "control-label col-md-4"})
+                <div class="col-md-8">
+                    @Html.DropDownListFor(model => model.MottorModelId, new SelectList(Model.MottorModels, "Id", "Name", Model.MottorModelId), "Select Vehicle Model", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.MottorModelId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        
+            <hr />
+            <div class="form-group">
+                @Html.LabelFor(model => model.PlateNumber, htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.PlateNumber, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.PlateNumber, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <hr/>
+            <div class="form-group">
+                @Html.LabelFor(model => model.DepartmentName, htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+                    @Html.DropDownListFor(model => model.DepartmentId, new SelectList(Model.Departments, "Id", "Name", Model.DepartmentId), "Select  Department for Vehicle", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.MottorModelId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <hr />
+            <div class="form-group">
+                @Html.LabelFor(model => model.IsAvailable, htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.IsAvailable, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.IsAvailable, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        
+
+        </div>
+    </div>
+
+
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal">Cancel</button>
+        <input class="btn btn-primary" type="submit" value="Save" />
+    </div>
+}
+

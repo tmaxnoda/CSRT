@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -46,11 +47,33 @@ namespace CSRT.Areas.Security.Controllers
             //Check the validity of the model
             if (ModelState.IsValid)
             {
-                // call an instance of Driver Class
-                var driver = MottorFactory.ViewModelToMottoEntity(model);
+                try
+                {
+                    // search for plate number
+                    var allMottors = _context.Mottors
+                        .ToList()
+                        .FirstOrDefault(x => x.PlateNumber.ToLower().Trim() == model.PlateNumber.ToLower().Trim());
 
-                _context.Mottors.Add(driver);
-                var i = await _context.SaveChangesAsync();
+                    //ValidateRequest plate number
+                   bool isPlateNumberExist = MottorFactory.isPlateNumberAlreadyExisting(allMottors, model);
+                    //redirect to index
+                    if (isPlateNumberExist == true)
+                    {
+                        Warning("Mottor  with plate number " + model.PlateNumber + " is already existing ", true);
+                        return Json(new { success = true });
+
+                    }
+                    var motto = MottorFactory.ViewModelToMottoEntity(model);
+                    
+                    _context.Mottors.Add(motto);
+                    var i = await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    return View("Error", new HandleErrorInfo(ex, "Motto", "Index"));
+                }
+                // call an instance of Driver Class
+                
                 Success("Creted Successfully", true);
                 return Json(new { success = true });
 
@@ -58,9 +81,49 @@ namespace CSRT.Areas.Security.Controllers
 
 
 
-            return PartialView("_Create", model); ;
+            return PartialView("_Create", model); 
         }
 
+
+        [HttpGet]
+        public async Task<ActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            }
+
+            Mottor mottor = await _context.Mottors.FindAsync(id);
+            if (mottor == null)
+            {
+                return HttpNotFound();
+            }
+
+            var model = MottorFactory.MottoEntityToViewModelFOrEdit(mottor);
+            setModeList(model);
+            return PartialView("_Edit", model);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(MottorViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Mottor motto = MottorFactory.ViewModelToMottoEntity(model);
+
+                _context.Entry(motto).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+
+                Success("Motto with the plate number : " + motto.PlateNumber + "   Updated Successfully", true);
+                return Json(new { success = true });
+
+            }
+
+            return PartialView("_Edit", model);
+        }
         // Private function
         private MottorViewModel setModeList(MottorViewModel model)
         {

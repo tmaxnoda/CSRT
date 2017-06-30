@@ -11,17 +11,17 @@ namespace CSRT.Models
        
         [Required]
         public int MotoId { get; set; }
-        [ForeignKey("Id")]
+        [ForeignKey("MotoId")]
         public Mottor Moto { get; set; }
        
         [Required]
         public int DriverId { get; set; }
-        [ForeignKey("Id")]
+        [ForeignKey("DriverId")]
         public Driver Driver { get; set; }
        
         [Required]
         public int DepartmentId { get; set; }
-        [ForeignKey("Id")]
+        [ForeignKey("DepartmentId")]
         public Department Department { get; set; }
         [Required]
         public string NumberOfPeopleGoingOut { get; set; }

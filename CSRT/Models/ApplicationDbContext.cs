@@ -31,11 +31,11 @@ namespace CSRT.Models
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             //var vehicleModel = modelBuilder.Entity<VehicleMovement>();
             //vehicleModel.HasKey(x => x.Id);
-            //var model = modelBuilder.Entity<VehicleMovement>();
-            //model
-            //    .HasRequired(x => x.Moto)
-            //    .WithMany()
-            //    .WillCascadeOnDelete(false);
+            var model = modelBuilder.Entity<VehicleMovement>();
+            model
+                .HasRequired(x => x.Moto)
+                .WithMany()
+                .WillCascadeOnDelete(false);
             base.OnModelCreating(modelBuilder);
             
         }

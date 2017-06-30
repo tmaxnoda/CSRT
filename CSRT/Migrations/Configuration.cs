@@ -9,7 +9,7 @@ namespace CSRT.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = true;
+            AutomaticMigrationsEnabled = false;
         }
 
         protected override void Seed(CSRT.Models.ApplicationDbContext context)
