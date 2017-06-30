@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using CSRT.Areas.Factory;
 using CSRT.Areas.Security.ViewModels;
 using CSRT.Models;
+using Microsoft.Ajax.Utilities;
 
 namespace CSRT.Areas.Security.Controllers
 {
@@ -49,13 +50,17 @@ namespace CSRT.Areas.Security.Controllers
             {
                 try
                 {
+                    bool isPlateNumberExist = false;
                     // search for plate number
                     var allMottors = _context.Mottors
                         .ToList()
                         .FirstOrDefault(x => x.PlateNumber.ToLower().Trim() == model.PlateNumber.ToLower().Trim());
-
+                    if (allMottors != null)
+                    {
+                         isPlateNumberExist =MottorFactory.isPlateNumberAlreadyExisting(allMottors, model);
+                    }
                     //ValidateRequest plate number
-                   bool isPlateNumberExist = MottorFactory.isPlateNumberAlreadyExisting(allMottors, model);
+                  
                     //redirect to index
                     if (isPlateNumberExist == true)
                     {
@@ -70,7 +75,8 @@ namespace CSRT.Areas.Security.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return View("Error", new HandleErrorInfo(ex, "Motto", "Index"));
+                    Danger(ex.Message, true);
+                    return Json(new { success = true });
                 }
                 // call an instance of Driver Class
                 
@@ -123,6 +129,87 @@ namespace CSRT.Areas.Security.Controllers
             }
 
             return PartialView("_Edit", model);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Mottor motto = await _context.Mottors.FindAsync(id);
+            if (motto == null)
+            {
+                return HttpNotFound();
+
+            }
+
+            MottorViewModel mottoViewModel = MottorFactory.MottoEntityToViewModelFOrEdit(motto);
+
+            return PartialView("_Delete", mottoViewModel);
+
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirmed(int id)
+        {
+            try
+            {
+                Mottor model = await _context.Mottors.FindAsync(id);
+                if (model != null) _context.Mottors.Remove(model);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Danger(e.Message, true);
+                return Json(new { success = true });
+            }
+            
+            Success("Model Deleted Successfully", true);
+            return Json(new { success = true });
+
+        }
+
+
+        public async Task<ActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            //find model
+            Mottor model = await _context.Mottors.FindAsync(id);
+
+            if (model == null)
+            {
+                return HttpNotFound();
+            }
+
+            //validate all by including all the vehicle
+            var singleOrDefault = _context.Mottors
+                .Include(x => x.Department)
+                .Include(x => x.Vehicle)
+                .Include(x => x.MottorModel)
+                .FirstOrDefault(x => x.Id == model.Id);
+
+            // check if such mottor cannot be found.
+            if (singleOrDefault == null)
+            {
+                Warning("Cannot find such mottor", true);
+                return Json(new { success = true });
+                
+                
+            }
+
+            model = singleOrDefault;
+
+            
+
+            MottorViewModel mottoViewModel = MottorFactory.MottoEntityToViewModel(model);
+            return PartialView("_Details", mottoViewModel);
         }
         // Private function
         private MottorViewModel setModeList(MottorViewModel model)

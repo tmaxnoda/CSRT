@@ -1,0 +1,36 @@
+﻿@model CSRT.Areas.Security.ViewModels.MottorViewModel
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title" id="myModalLabel"> Mottor Details</h4>
+</div>
+<div class="modal-body">
+
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.PlateNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PlateNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.MottorModelName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MottorModelName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DateCreated)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateCreated)
+        </dd>
+       
+        
+
+    </dl>
+</div>
+<div class="modal-footer">
+    <button class="btn" data-dismiss="modal">Ok</button>
+</div>
