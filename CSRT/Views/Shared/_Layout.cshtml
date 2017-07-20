@@ -4,9 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
-    @Styles.Render("~/Content/css")
+        @Styles.Render("~/Content/css")
+    
     <link href="~/Content/DataTables/css/dataTables.bootstrap.css" rel="stylesheet" />
     <link href="~/Content/bootstrap-toggle-master/css/bootstrap-toggle.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
             @Scripts.Render("~/bundles/modernizr")
             @*<link href="~/Content/DataTables/css/jquery.dataTables.css" rel="stylesheet" />*@
 
@@ -40,17 +42,19 @@
     @Html.Partial("_Alert")
     @RenderBody()
 
-    <hr/>
-    <footer>
-        <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-    </footer>
+   
 </div>
-
+<hr/>
+<footer class="pull-right">
+    <p>&copy; @DateTime.Now.Year - CYBER GEEKS</p>
+</footer>
     @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/bootstrap")
+   
     <script src="~/Scripts/DataTables/jquery.dataTables.js"></script>
     <script src="~/Scripts/DataTables/dataTables.bootstrap.js"></script>
     <script src="~/Content/bootstrap-toggle-master/js/bootstrap-toggle.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
     <script src="~/Scripts/modalform.js"></script>
     @RenderSection("scripts", required: false)
 

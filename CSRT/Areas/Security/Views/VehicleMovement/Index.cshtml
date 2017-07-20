@@ -1,0 +1,107 @@
+﻿
+
+
+
+@model PagedList.IPagedList<CSRT.Areas.Security.ViewModels.VehicleMovementViewModel>
+@using PagedList.Mvc
+<link href="~/Content/PagedList.css" rel="stylesheet" />
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<br/>
+<br/>
+<br/>
+
+
+
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title"><span class="badge">
+            @if (String.IsNullOrEmpty(@Model.Count().ToString()))
+            {
+                <b>0</b>
+            }
+            else
+            {
+                <b>@Model.Count().ToString()</b> 
+            }
+        </span>Official Movement(s)</h3>
+    </div>
+    <div class="panel-body">
+        @if (@Model.Count().Equals(0))
+        {
+            <ul class="list-group">
+                <li href="#" class="list-group-item ">
+                    <blockquote class="card-blockquote">
+                        <i class="fa fa-car fa-4x" aria-hidden="true"></i>
+
+                        <p>No Official  Movement Record Yet</p>
+                        <footer>
+                            <a href="@Url.Action("Create","VehicleMovement")"> Add New Official Movement</a> 
+                            
+                        </footer>
+                            
+                    </blockquote>
+                </li>
+               
+            </ul>
+
+
+
+
+        }
+        else
+        {
+
+            <ul class="list-group">
+                @foreach (var item in Model)
+                {
+                    <div class="col-lg-6">
+                        <li href="#" class="list-group-item ">
+
+                            <blockquote class="card-blockquote">
+                                <i class="fa fa-car fa-4x" aria-hidden="true"></i>||<span>@Html.DisplayFor(modelItem => item.MotoMake) - </span> <span>@Html.DisplayFor(modelItem => item.MotoModel)</span> 
+                                <p><span>Plate Number :</span> @Html.DisplayFor(modelItem => item.Moto)</p>
+                                <p><span>Date :</span> @Html.DisplayFor(modelItem => item.Date) || <span>Time Out :</span> @Html.DisplayFor(modelItem => item.TimeOut)</p>
+                                <p><span>Driver On Asssigment :</span> @Html.DisplayFor(modelItem => item.Driver)</p>
+                                <p><span>Purpose Of Official Assigment :</span> @Html.DisplayFor(modelItem => item.Purpose)</p>
+                                <p><span>Destination :</span> @Html.DisplayFor(modelItem => item.Destination)</p>
+                                <p><span>Name(s) Of People On Official Assigment :</span> @Html.DisplayFor(modelItem => item.NameOfPeopleGoingOut)</p>
+                                <footer>
+                                    <a href="@Url.Action("Create", "VehicleMovement")"> Create</a> |
+                                    <a href="@Url.Action("Edit", "", "")"> Edit</a> |
+                                    <a href="@Url.Action("Edit", "", "")"> Milage</a>
+                                </footer>
+
+                            </blockquote>
+                
+                        </li> 
+                        <br />
+                    </div>
+                   
+                }
+               
+            </ul>
+
+        }
+        
+       
+    </div>
+    
+</div>
+<div class="box-footer">
+    <div class="box-tools pull-left">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("Index",
+            new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    </div>
+
+
+           
+</div>
