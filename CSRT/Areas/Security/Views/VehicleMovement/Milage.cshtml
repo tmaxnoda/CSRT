@@ -1,0 +1,121 @@
+﻿
+
+
+@model CSRT.Areas.Security.ViewModels.MilageViewModel
+
+@{
+    ViewBag.Title = "Milage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<!-- modal placeholder-->
+<div id='myModal' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+
+<div class="col-md-12" id="above">
+    <div class="col-md-6">
+        <ul class="nav nav-pills">
+            <li class="active"><a href="#"><span class="badge">1</span>Model(s) </a></li>
+
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <p class="pull-right">
+            <a href="@Url.Action("Index", "VehicleMovement",new { @class = "btn btn-success"})" > Go back</a>
+           
+        </p>
+    </div>
+</div>
+
+
+
+
+
+
+<div class="panel-body">
+    <table id="mottoomodels" class="table table-responsive table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.MilageOut)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TimeOut)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.MilageIn)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TimeIn)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MilageCovered)
+                </th>
+
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+           
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => modelItem.MilageOut)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => modelItem.TimeOut)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => modelItem.MilageIn)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => modelItem.TimeIn)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => modelItem.MilageCovered)
+                    </td>
+
+                   
+
+                    <td>
+
+                        <div class="dropdown">
+                            <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+                                Actions
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-header">List of actions</li>                               
+                                <li>@Html.ActionLink("Edit", "Edit", "Milage", new { id = Model.Id }, new { data_modal = "" })</li>
+                                <li>@Html.ActionLink("Details", "Details", new { id = Model.Id }, new { data_modal = "" })</li>
+                                <li>@Html.ActionLink("Delete", "Delete", new { id = Model.Id }, new { data_modal = "" })</li>
+                                <li class="divider"></li>
+
+                            </ul>
+                        </div>
+
+                    </td>
+                </tr>
+
+            
+        </tbody>
+    </table>
+</div>
+
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#mottoomodels').DataTable();
+
+        });
+    </script>
+}

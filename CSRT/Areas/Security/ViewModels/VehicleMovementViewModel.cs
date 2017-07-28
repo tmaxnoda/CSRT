@@ -12,7 +12,7 @@ namespace CSRT.Areas.Security.ViewModels
     public class VehicleMovementViewModel
     {
         public VehicleMovementViewModel() { }
-
+        //ToString("hh:mm:ss tt");
         public VehicleMovementViewModel(VehicleMovement model)
         {
             Id = model.Id;
@@ -24,7 +24,7 @@ namespace CSRT.Areas.Security.ViewModels
             Department = model.Department.Name;
             NumberOfPeopleGoingOut = model.NumberOfPeopleGoingOut;
             NameOfPeopleGoingOut = model.NameOfPeopleGoingOut;
-            TimeOut = model.TimeOut.ToString("HH:mm");
+            TimeOut = model.TimeOut.ToString("HH:mm tt");
             Date = model.Date.ToString("d MMM yyyy");
             MilageOut = model.MilageOut;
             Purpose = model.Purpose;

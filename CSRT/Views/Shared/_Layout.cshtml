@@ -8,7 +8,10 @@
     
     <link href="~/Content/DataTables/css/dataTables.bootstrap.css" rel="stylesheet" />
     <link href="~/Content/bootstrap-toggle-master/css/bootstrap-toggle.css" rel="stylesheet" />
-    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <link href="~/timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" />
+    <link href="~/datepicker/css/datepicker.css" rel="stylesheet" />
+    @*<link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />*@
+    
             @Scripts.Render("~/bundles/modernizr")
             @*<link href="~/Content/DataTables/css/jquery.dataTables.css" rel="stylesheet" />*@
 
@@ -32,7 +35,7 @@
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    <li>@Html.ActionLink("Role", "Index", "Role")</li>
+                    
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -42,22 +45,38 @@
     @Html.Partial("_Alert")
     @RenderBody()
 
-   
+    
+
 </div>
 <hr/>
 <footer class="pull-right">
     <p>&copy; @DateTime.Now.Year - CYBER GEEKS</p>
 </footer>
     @Scripts.Render("~/bundles/jquery")
+    @*<script src="~/Scripts/moment.min.js"></script>*@
     @Scripts.Render("~/bundles/bootstrap")
-   
+    @*<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>*@
     <script src="~/Scripts/DataTables/jquery.dataTables.js"></script>
     <script src="~/Scripts/DataTables/dataTables.bootstrap.js"></script>
     <script src="~/Content/bootstrap-toggle-master/js/bootstrap-toggle.js"></script>
-    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    @*<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>*@
     <script src="~/Scripts/modalform.js"></script>
+    <script src="~/timepicker/js/bootstrap-timepicker.min.js"></script>
+    <script src="~/datepicker/js/bootstrap-datepicker.js"></script>  
     @RenderSection("scripts", required: false)
 
 
+  
+    <script type="text/javascript">
+
+        $('#timepicker1').timepicker({
+            template: false,
+            showInputs: false,
+            minuteStep: 5
+        });
+        $('.datepicker').datepicker();
+       
+       
+    </script>
 </body>
 </html>

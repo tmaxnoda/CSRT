@@ -46,6 +46,25 @@ namespace CSRT.Areas.Security.Controllers
             return View(vm);
         }
 
+
+        [HttpGet]
+        public ActionResult Milage(int id)
+        {
+            
+            var milage = _dbcontext.Milages.SingleOrDefault(x => x.VehicleMovementId.Equals(id));
+            if(milage == null)
+            {
+                Danger("Vehicle Milage Cannot be found", true);
+                return RedirectToAction("Index");
+            }
+
+             var model= MilageFactory.EntityToViewModel(milage);
+           
+            return View(model);
+        }
+
+       
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create( VehicleMovementViewModel model)
@@ -90,6 +109,7 @@ namespace CSRT.Areas.Security.Controllers
                         scope.Complete();
                         scope.Dispose();
                     }
+                    //Desig
                 }
                 catch (DbEntityValidationException e)
                 {
