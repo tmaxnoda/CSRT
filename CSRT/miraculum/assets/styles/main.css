@@ -1,0 +1,128 @@
+/* Global stuff */
+
+* { outline: none !important; }
+
+html {
+  min-height: 100%;
+  height:100%;
+}
+
+body {
+  background:#fff url(../images/bg-noon.jpg) no-repeat top center;
+  background-size:cover;
+  display:flex;
+  flex-direction: column;
+  align-content: space-between;
+  justify-content: space-between;
+  color: #000;
+  height: 100%;
+  min-height: 100%;
+  font-family: "Poppins", Helvetica, Arial, sans-serif;
+  font-size: calc(16px + 1vw);
+}
+
+body.morning {
+  background:#fff url(../images/bg-morning.jpg) no-repeat top center;
+  background-size:cover;
+  color: #fff;
+}
+body.evening {
+  background:#fff url(../images/bg-evening.jpg) no-repeat top center;
+  background-size:cover;
+  color: #fff;
+}
+body.night {
+  background:#fff url(../images/bg-night.jpg) no-repeat top center;
+  background-size:cover;
+  color: #fff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  line-height: 1.4;
+}
+
+p {
+  font-size: .7em;
+}
+
+a {
+  color: inherit;
+}
+
+header,
+.main,
+footer {
+  display: flex;
+}
+
+header {
+  height: 2em;
+}
+
+/* Main part */
+
+.main {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height:20em;
+}
+
+.main h1,
+.main h2 {
+  font-weight: normal;
+  text-align: center;
+}
+
+.main h1 {
+  opacity: .7;
+  font-size: calc(0.2em + 9vw);
+}
+
+.main h2 {
+  font-size: .7em;
+  max-width: 70%;
+  margin-top: 1em;
+}
+
+.main p {
+  max-width: 70%;
+  margin-top:1em;
+  text-align: center;
+}
+
+
+/* Footer */
+
+footer {
+  width: 100%;
+  height: 2em;
+  overflow: hidden;
+}
+
+.social {
+  display: flex;
+  margin:0 auto;
+  font-size: 1.3em;
+}
+
+.social a {
+  display: inline-block;
+  margin: 0 .5em;
+  color: #000;
+  opacity: .8;
+  transition: opacity 0.3s linear;
+}
+
+.social a:hover {
+  opacity: 1;
+}
+
+.evening .social a,
+.night .social a,
+.morning .social a {
+  color: #fff;
+}

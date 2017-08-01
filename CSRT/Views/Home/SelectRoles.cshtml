@@ -1,0 +1,38 @@
+﻿@using System.Security.Claims
+@{
+    ViewBag.Title = "Select Roles";
+    Layout = " ";
+    var Model = (User.Identity as ClaimsIdentity).Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
+}
+
+<div class="box">
+    <div class="box-header with-border">
+        <h2>Welcome @HttpContext.Current.User.Identity.Name</h2>
+        <h3>Select the area you want to enter</h3>
+    </div>
+    <div class="box-body">
+        <div class="row">
+            @if (Model.Any(r => r == "Security"))
+            {
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-aqua">
+                        <span class="info-box-icon"><i class="fa fa-users"></i></span>
+                        <a href="@Url.Action("Index","VehicleMovement", new {area="Security"})" style="color:white;">
+                            <div class="info-box-content">
+                                <span class="info-box-text">Lecturer</span>
+                                <span class="info-box-number">&nbsp;</span>
+                                <div class="progress">
+                                    <div class="progress-bar" style="width: 70%"></div>
+                                </div>
+                                <span class="progress-description">
+                                    Add or upload scores
+                                </span>
+                            </div>
+                        </a><!-- /.info-box-content -->
+                    </div><!-- /.info-box -->
+                </div><!-- /.col -->
+            }
+           
+        </div>
+    </div>
+</div>

@@ -1,23 +1,26 @@
 ﻿@using Microsoft.AspNet.Identity
-@if (Request.IsAuthenticated)
+@if (Request.IsAuthenticated && User.IsInRole("Security"))
 {
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    using (Html.BeginForm("LogOff", "Account", new { area = "" }, FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
     @Html.AntiForgeryToken()
 
     <ul class="nav navbar-nav navbar-right">
+        @*<li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>*@
+        <li><a href="@Url.Action("Register", "Account",new { area = " " })">Register</a></li>
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@User.Identity.GetUserName() <span class="caret"></span></a>
             <ul class="dropdown-menu">
-                <li><a href="@Url.Action("Create", "VehicleMovement")">Add Movement</a></li>
-                <li><a href="@Url.Action("Create", "Motto")">Add Mottor</a></li>
-                <li><a href="@Url.Action("Create", "Driver")">Add Driver</a></li>
-                <li><a href="@Url.Action("Create", "Department")">Add Driver</a></li>
-                <li>@Html.ActionLink("Role", "Index", "Role")</li>
+                <li><a href="@Url.Action("Index", "VehicleMovement",new { area = "Security" })">Add Movement</a></li>
+                <li><a href="@Url.Action("Index", "Motto",new { area = "Security" })">Add Mottor</a></li>
+                <li><a href="@Url.Action("Index", "Driver",new { area = "Security" })">Add Driver</a></li>
+                <li><a href="@Url.Action("Index", "Department",new { area = "Security" })">Add Driver</a></li>
+                <li>@Html.ActionLink("Role", "Index", "Role", new { area = "Security" })</li>
                 <li role="separator" class="divider"></li>
                 <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
             </ul>
         </li>
+        
         
     </ul>
     }
@@ -25,7 +28,7 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+        
+        @*<li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>*@
     </ul>
 }

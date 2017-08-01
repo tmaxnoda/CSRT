@@ -1,10 +1,12 @@
 ﻿using CSRT.AccountViewModels;
+using CSRT.Areas.Security.Controllers;
 using CSRT.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -12,7 +14,7 @@ using System.Web.Mvc;
 namespace CSRT.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class AccountController : AlertController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -64,6 +66,49 @@ namespace CSRT.Controllers
             }
         }
 
+        private List<string> GetUserRoles(string username)
+        {
+            List<string> ListOfRoleNames = new List<string>();
+            var ListOfRoleIds = UserManager.FindByEmail(username).Roles.Select(x => x.RoleId).ToList();
+            foreach (string id in ListOfRoleIds)
+            {
+                string rolename = RoleManager.FindById(id).Name;
+                ListOfRoleNames.Add(rolename);
+            }
+
+            return ListOfRoleNames;
+        }
+
+
+        public ActionResult CompleteLogin(string ReturnUrl)
+        {
+            //if there are different areas, redirect to the area based on user's role
+            if (User.Identity.IsAuthenticated)
+            {
+                var uroles = (User.Identity as ClaimsIdentity).Claims.Where(c => c.Type == ClaimTypes.Role).ToList();
+                if (string.IsNullOrEmpty(ReturnUrl) == false)
+                    return RedirectToLocalUrl(ReturnUrl);
+                if (uroles.Count() > 1)
+                    return RedirectToAction("SelectRoles", "Home", new { area = "" });
+                if (User.IsInRole("Security"))
+                    return RedirectToAction("index", "VehicleMovement", new { area = "Security" });
+                //if (User.IsInRole("Lecturer"))
+                //    return RedirectToAction("index", "home", new { area = "Lecturer" });
+                //if (User.IsInRole("School"))
+                //    return RedirectToAction("index", "home", new { area = "School" });
+                //if (User.IsInRole("DEA"))
+                //    return RedirectToAction("index", "home", new { area = "dea" });
+                //if (User.IsInRole("Student"))
+                //    return RedirectToAction("index", "home", new { area = "Student" });
+                //if (User.IsInRole("SuperAdmin"))
+                //    return RedirectToAction("index", "home", new { area = "SuperAdmin" });
+                //if (User.IsInRole("Publish"))
+                //    return RedirectToAction("index", "home", new { area = "published" });
+            }
+
+            return RedirectToAction("Index","LandingPage");
+        }
+
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -84,14 +129,31 @@ namespace CSRT.Controllers
             {
                 return View(model);
             }
-
+            
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+           
+
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    var user = await UserManager.FindByEmailAsync(model.Email);
+                    this.SignInManager.SignIn(user, model.RememberMe, true);
+                    var identity = User.Identity as ClaimsIdentity;
+                    identity.AddClaims(new List<Claim>(
+                        new[]
+                        {
+                            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                            new Claim(ClaimTypes.Name, user.Email)
+                        }
+                    ));
+
+                    var aspnetuserole = GetUserRoles(user.Email);
+
+                    aspnetuserole.ForEach(r => identity.AddClaim(new Claim(ClaimTypes.Role, r)));
+                    return RedirectToAction("CompleteLogin", new { ReturnUrl = returnUrl });
+                    //return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -99,7 +161,8 @@ namespace CSRT.Controllers
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
-                    return View(model);
+                    //Danger("Invalid login attempt", false);
+                    return View("Login",model);
             }
         }
 
@@ -184,7 +247,7 @@ namespace CSRT.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "LandingPage");
                 }
                 AddErrors(result);
             }
@@ -413,7 +476,7 @@ namespace CSRT.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "LandingPage");
         }
 
         //
@@ -444,6 +507,14 @@ namespace CSRT.Controllers
             base.Dispose(disposing);
         }
 
+        private ActionResult RedirectToLocalUrl(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            return RedirectToAction("Index", "Home");
+        }
         #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
@@ -470,7 +541,7 @@ namespace CSRT.Controllers
             {
                 return Redirect(returnUrl);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "LandingPage");
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult

@@ -4,9 +4,13 @@ namespace CSRT.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        [Authorize]
+        //[Route("home/selectroles")]
+        public ActionResult SelectRoles() => View();
+
+        public ActionResult LandingPage()
         {
-            return View();
+            return View("land");
         }
         [Authorize(Roles = "Security")]
         public ActionResult About()

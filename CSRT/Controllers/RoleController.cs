@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace CSRT.Controllers
 {
-    [Authorize(Roles = "Security")]
+    //[Authorize(Roles = "Security")]
     public class RoleController : Controller
     {
         private ApplicationRoleManager _roleManager;

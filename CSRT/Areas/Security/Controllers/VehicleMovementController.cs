@@ -14,6 +14,7 @@ using PagedList;
 
 namespace CSRT.Areas.Security.Controllers
 {
+    [Authorize]
     public class VehicleMovementController : AlertController
     {
         private ApplicationDbContext _dbcontext;
